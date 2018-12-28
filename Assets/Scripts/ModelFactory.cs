@@ -22,7 +22,7 @@ namespace DefaultNamespace
             
             wall.transform.parent = go.transform;
             wall.transform.position = Vector3.zero;
-            wall.transform.RotateAround(Vector3.zero, Vector3.up,-a);
+            wall.transform.Rotate(Vector3.up,-a);
             go.transform.position = start;
             return go;
         }
@@ -38,9 +38,64 @@ namespace DefaultNamespace
         public static GameObject CreateSquareRoom(Vector3 position, float size, float height, string[] materialNames)
         {
             GameObject root = new GameObject("SquareRoom");
+
+            float halfSize = size / 2f;
             
+            // North wall
+            GameObject north = CreateWall(size, height, materialNames[2]);
+            north.name = "NorthWall";
+            north.transform.parent = root.transform;
+            north.transform.position = new Vector3(-halfSize,0,halfSize);
+            // East wall
+            GameObject east = CreateWall(size, height, materialNames[3]);
+            east.name = "EastWall";
+            east.transform.parent = root.transform;
+            east.transform.position = new Vector3(halfSize,0,halfSize);
+            east.transform.Rotate(Vector3.up, 90);
+            // South wall
+            GameObject south = CreateWall(size, height, materialNames[4]);
+            south.name = "SouthWall";
+            south.transform.parent = root.transform;
+            south.transform.position = new Vector3(halfSize,0,-halfSize);
+            south.transform.Rotate(Vector3.up,180);
+            // West wall
+            GameObject west = CreateWall(size, height, materialNames[5]);
+            west.name = "WestWall";
+            west.transform.parent = root.transform;
+            west.transform.position = new Vector3(-halfSize,0,-halfSize);
+            west.transform.Rotate(Vector3.up,270);
             
-            return null;
+            // Floor
+            GameObject floorAnchor = new GameObject("FloorAnchor");
+            floorAnchor.transform.parent = root.transform;
+           
+            GameObject floor = CreateWall(size, size, materialNames[0]);
+            floor.name = "Floor";
+            floor.transform.parent = floorAnchor.transform;
+            // North Aligned
+            floorAnchor.transform.position = new Vector3(-halfSize, 0, -halfSize);
+            floorAnchor.transform.Rotate(Vector3.right,90);
+            // East Aligned
+            //floorAnchor.transform.position = new Vector3(-halfSize, 0, halfSize);
+            //floorAnchor.transform.Rotate(Vector3f.back,90);
+            
+            // Ceiling
+            GameObject ceilingAnchor = new GameObject("CeilingAnchor");
+            ceilingAnchor.transform.parent = root.transform;
+           
+            GameObject ceiling = CreateWall(size, size, materialNames[1]);
+            ceiling.name = "Ceiling";
+            ceiling.transform.parent = ceilingAnchor.transform;
+
+            root.transform.position = position;
+            // North Aligned
+            ceilingAnchor.transform.position = new Vector3(halfSize, height, halfSize);
+            ceilingAnchor.transform.Rotate(Vector3.right,-90);
+            // East Aligned
+            //ceilingAnchor.transform.position = new Vector3(halfSize, height, -halfSize);
+            //ceilingAnchor.transform.Rotate( Vector3.back, -90);
+            
+            return root;
         }
 
         

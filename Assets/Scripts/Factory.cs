@@ -17,35 +17,17 @@ public class Factory : MonoBehaviour
 	public float height = 2f;
 	public string posMatName = "";
 
-	[SerializeField]
-	public List<Wall> Walls;
-
-	[Serializable]
-	public class Wall
-	{
-		public Vector3 Start;
-		public Vector3 End;
-		public float Height;
-		public string MaterialName;
-		public GameObject GameObject;
-	}
+	
+	public Vector3 pos = new Vector3(10,0,0);
+	public float Size = 10f;
+	public float RH = 5f;
+	public string[] names = new[] {"Concrete", "Concrete", "Concrete", "Concrete", "Concrete", "Concrete"};
 	
 	// Use this for initialization
 	void Start ()
 	{
 		ModelFactory.CreateWall(Width, Height, MaterialName);
 		ModelFactory.CreatePositionedWall(start, end, height, posMatName);
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		Walls.ForEach(w =>
-		{
-			if (w.GameObject == null)
-			{
-				w.GameObject = ModelFactory.CreatePositionedWall(w.Start, w.End, w.Height, w.MaterialName);
-			}
-		});
+		ModelFactory.CreateSquareRoom(pos, Size, RH, names);
 	}
 }
