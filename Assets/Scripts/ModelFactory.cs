@@ -152,11 +152,11 @@ namespace DefaultNamespace
             
             if (width > height)
             {
-                yUnit = height / width;
+                xUnit = width / height;
             }
             else
             {
-                xUnit = width / height;
+                yUnit =  height / width;
             }
             
             uv[0] = new Vector2(0, 0);
@@ -185,6 +185,148 @@ namespace DefaultNamespace
 
             }
             
+            
+            return go;
+        }
+
+        /// <summary>
+        /// Calculates normalized units for the smallest square.
+        /// E.g. if width is 200 and height is 100, then the resulting x is 2
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        private static Vector2 CalculateUnit(float width, float height)
+        {
+            float xUnit = 1,
+            yUnit = 1;
+            
+            if (width > height)
+            {
+                xUnit = width / height;
+            }
+            else
+            {
+                yUnit =  height / width;
+            }
+            return new Vector2(xUnit,yUnit);
+        }
+
+        public static GameObject CreateCuboid(float width, float height, float depth)
+        {
+            GameObject go = new GameObject("Cuboid");
+            MeshFilter meshFilter = go.AddComponent<MeshFilter>();
+            MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
+            Mesh mesh = meshFilter.mesh;
+            
+            // The naming is always from the front and downwards looking! e.g. From the back, left and right is swapped
+            Vector3 frontLeftDown = Vector3.zero;
+            Vector3 frontRightDown = new Vector3(width, 0,0);
+            Vector3 frontLeftUp = new Vector3(0,height,0);
+            Vector3 frontRightUp = new Vector3(width,height,0);
+
+            Vector3 backLeftDown = new Vector3(0, 0, depth);
+            Vector3 backRightDown = new Vector3(width, 0,depth);
+            Vector3 backLeftUp = new Vector3(0,height,depth);
+            Vector3 backRightUp = new Vector3(width,height,depth);
+
+            Vector3[] vertices = new[]
+            {
+                // Front
+                frontLeftDown,frontRightDown,frontLeftUp,frontRightUp,
+                // Back
+                backLeftDown,backRightDown,backLeftUp,backRightUp,
+                // Left
+                backLeftDown,frontLeftDown,backLeftUp,frontLeftUp,
+                // Right
+                frontRightDown,backRightDown,frontRightUp,backRightUp,
+                // Up
+                frontLeftUp,frontRightUp,backLeftUp,backRightUp,
+                // Down
+                frontLeftDown,frontRightDown,backLeftDown,backRightDown
+            };
+            mesh.vertices = vertices;
+
+            int[] triangles = new[]
+            {
+                // Front
+                0,2,1,2,3,1,
+                // Back
+                5,7,4,7,6,4,
+                // Left
+                8,10,9,10,11,9,
+                // Right
+                12,14,13,14,15,13,
+                // Up
+                16,18,17,18,19,17,
+                // Down
+                21,23,20,23,22,20
+            };
+            mesh.triangles = triangles;
+            
+            Vector3[] normals = new[]
+            {
+                // Front
+                -Vector3.forward,-Vector3.forward,-Vector3.forward,-Vector3.forward,
+                // Back
+                -Vector3.back,-Vector3.back,-Vector3.back,-Vector3.back,
+                // Left
+                -Vector3.left,-Vector3.left,-Vector3.left,-Vector3.left,
+                // Right
+                -Vector3.right,-Vector3.right,-Vector3.right,-Vector3.right,
+                // Up
+                -Vector3.up,-Vector3.up,-Vector3.up,-Vector3.up,
+                // Down
+                -Vector3.down,-Vector3.down,-Vector3.down,-Vector3.down
+            };
+            mesh.normals = normals;
+
+            // Cube based uv mapping
+            
+            Vector2 xyUnits = CalculateUnit(width, height);
+            Vector2 xzUnits = CalculateUnit(width, depth);
+            Vector2 yzUnits = CalculateUnit(depth, height);
+
+            float xyThird = xyUnits.y / 3f;
+            float xyQuart = xyUnits.x / 4f;
+
+            float xzThird = xzUnits.y / 3f;
+            float xzQuart = xzUnits.x / 4f;
+
+            float yzThird = yzUnits.y / 3f;
+            float yzQuart = yzUnits.x / 4f;
+            
+            Vector2[] uv = new[]
+            {
+                // Front
+                new Vector2(xyQuart, xyThird), new Vector2(2 * xyQuart, xyThird), new Vector2(xyQuart, 2 * xyThird),
+                new Vector2(2 * xyQuart, 2 * xyThird),
+                // Back
+                new Vector2(3 * xyQuart, xyThird), new Vector2(4 * xyQuart, xyThird), new Vector2(3 * xyQuart, 2 * xyThird),
+                new Vector2(4 * xyQuart, 2 * xyThird),
+                // Left
+                new Vector2(0, yzThird), new Vector2(yzQuart, yzThird), new Vector2(0, 2 * yzThird),
+                new Vector2(yzQuart, 2 * yzThird),
+                // Right
+                new Vector2(2 * yzQuart, yzThird), new Vector2(3 * yzQuart, yzThird), new Vector2(2 * yzQuart, 2 * yzThird),
+                new Vector2(3 * yzQuart, 2 * yzThird),
+                // Up
+                new Vector2(xzQuart, 2 * xzThird), new Vector2(2 * xzQuart, 2 * xzThird), new Vector2(xzQuart, 3 * xzThird),
+                new Vector2(2 * xzQuart, 3 * xzThird),
+                // Down
+                new Vector2(xzQuart, 0), new Vector2(2 * xzQuart, 0), new Vector2(xzQuart, xzThird),
+                new Vector2(2 * xzQuart, xzThird)
+            };
+            
+            mesh.uv = uv;
+            
+            mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();
+            
+            meshRenderer.material = new Material(Shader.Find("Standard"));
+            meshRenderer.material.name = "Default";
+            meshRenderer.material.color = Color.green;
             
             return go;
         }

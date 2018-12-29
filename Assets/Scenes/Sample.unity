@@ -477,6 +477,9 @@ MonoBehaviour:
   - NWood
   - WhiteStucco
   - LimeBricks
+  CW: 0.05
+  CH: 2
+  CD: 0.05
 --- !u!4 &1104102326
 Transform:
   m_ObjectHideFlags: 0
