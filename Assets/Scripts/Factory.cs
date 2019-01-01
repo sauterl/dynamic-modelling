@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using DefaultNamespace;
 using UnityEngine;
+using UNIBAS.DBIS.VREP.Models;
 
 public class Factory : MonoBehaviour
 {
@@ -32,7 +32,7 @@ public class Factory : MonoBehaviour
 	{
 		ModelFactory.CreateWall(Width, Height, MaterialName).transform.position = new Vector3(-2,0,0);
 		ModelFactory.CreatePositionedWall(start, end, height, posMatName);
-		ModelFactory.CreateSquareRoom(pos, Size, RH, names);
+		ModelFactory.CreateCuboidRoom(pos, Size, RH, names);
 		ModelFactory.CreateCuboid(CW, CH, CD).transform.position = new Vector3(1,1,-1);
 	}
 }

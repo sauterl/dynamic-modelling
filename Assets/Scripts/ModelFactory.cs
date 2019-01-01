@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace UNIBAS.DBIS.VREP.Models
 {
     public static class ModelFactory
     {
@@ -35,7 +35,7 @@ namespace DefaultNamespace
         /// <param name="height"></param>
         /// <param name="materialNames">0 floor, 1 ceiling, 2 north (pos z), 3 east (pos x), 4 south (neg z), 5 west (neg x)</param>
         /// <returns></returns>
-        public static GameObject CreateSquareRoom(Vector3 position, float size, float height, string[] materialNames)
+        public static GameObject CreateCuboidRoom(Vector3 position, float size, float height, string[] materialNames)
         {
             GameObject root = new GameObject("SquareRoom");
 
