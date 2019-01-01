@@ -477,9 +477,12 @@ MonoBehaviour:
   - NWood
   - WhiteStucco
   - LimeBricks
-  CW: 0.05
+  CW: 2
   CH: 2
-  CD: 0.05
+  CD: 1
+  DoorMaterial: {fileID: 2100000, guid: 79febc8c027dfe449b7e4c20319655c4, type: 2}
+  ButtonPlate: {fileID: 2100000, guid: 190ae71093c17bb4682fd48babadaa4c, type: 2}
+  ButtonB: {fileID: 2100000, guid: 2067f760c18509c4693e2190b898fe2a, type: 2}
 --- !u!4 &1104102326
 Transform:
   m_ObjectHideFlags: 0

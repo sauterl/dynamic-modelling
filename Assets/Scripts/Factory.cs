@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unibas.DBIS.DynamicModelling;
+using Unibas.DBIS.DynamicModelling.Models;
 using UnityEngine;
-using UNIBAS.DBIS.VREP.Models;
 
 public class Factory : MonoBehaviour
 {
@@ -26,6 +27,11 @@ public class Factory : MonoBehaviour
 	public float CW = 1;
 	public float CH = 1;
 	public float CD = 1;
+
+	public Material DoorMaterial;
+
+	public Material ButtonPlate;
+	public Material ButtonB;
 	
 	// Use this for initialization
 	void Start ()
@@ -33,6 +39,20 @@ public class Factory : MonoBehaviour
 		ModelFactory.CreateWall(Width, Height, MaterialName).transform.position = new Vector3(-2,0,0);
 		ModelFactory.CreatePositionedWall(start, end, height, posMatName);
 		ModelFactory.CreateCuboidRoom(pos, Size, RH, names);
+		
 		ModelFactory.CreateCuboid(CW, CH, CD).transform.position = new Vector3(1,1,-1);
+		
+		ComplexCuboidModel doorModel = new ComplexCuboidModel();
+		
+		doorModel.Add(Vector3.zero, new CuboidModel(0.05f, 2-0.05f,0.3f,DoorMaterial));
+		doorModel.Add(new Vector3(0,2-0.05f,0), new CuboidModel(1.5f+0.1f,0.05f,0.3f,DoorMaterial));
+		doorModel.Add(new Vector3(0.05f+1.5f,0,0), new CuboidModel(0.05f, 2-0.05f,0.3f,DoorMaterial));
+
+		ModelFactory.CreateModel(doorModel);
+		
+		ComplexCuboidModel buttonModel = new ComplexCuboidModel();
+		buttonModel.Add(Vector3.zero, new CuboidModel(.1f,.1f,.01f, ButtonPlate));
+		buttonModel.Add(new Vector3(0.02f,.02f,-.01f), new CuboidModel(0.1f-0.04f,0.1f-0.04f, 0.01f, ButtonB));
+		ModelFactory.CreateModel(buttonModel);
 	}
 }
