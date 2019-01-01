@@ -1,6 +1,7 @@
-# Unity3d Sandbox
+# Unity3d Dynamic Modelling Framework
 
-Collection of [Unity3d](https://unity3d.com/) experiments.
+This small framework allows dynamic modelling in [Unity3d](https://unity3d.com/).
+Since Unity does not provide a generic interface for creating models in code,
+this framework shall bridge that gap.
 
-Currently mainly focused around procedurally generated models
 
