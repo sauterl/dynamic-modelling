@@ -32,6 +32,11 @@ public class Factory : MonoBehaviour
 
 	public Material ButtonPlate;
 	public Material ButtonB;
+
+	public Vector3[] points = new[]
+	{
+		new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(1, 1, 0)
+	};
 	
 	// Use this for initialization
 	void Start ()
@@ -54,5 +59,7 @@ public class Factory : MonoBehaviour
 		buttonModel.Add(Vector3.zero, new CuboidModel(.1f,.1f,.01f, ButtonPlate));
 		buttonModel.Add(new Vector3(0.02f,.02f,-.01f), new CuboidModel(0.1f-0.04f,0.1f-0.04f, 0.01f, ButtonB));
 		ModelFactory.CreateModel(buttonModel);
+
+		ModelFactory.CreateFreeformQuad(points[0], points[1], points[2], points[3]);
 	}
 }
