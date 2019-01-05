@@ -365,6 +365,25 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1864282202774774, guid: efaba2e0ce199c34fb7d4c48f7c3e9b2, type: 2}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23630137123032074, guid: efaba2e0ce199c34fb7d4c48f7c3e9b2,
+        type: 2}
+      propertyPath: m_MotionVectors
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 23630137123032074, guid: efaba2e0ce199c34fb7d4c48f7c3e9b2,
+        type: 2}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23630137123032074, guid: efaba2e0ce199c34fb7d4c48f7c3e9b2,
+        type: 2}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: efaba2e0ce199c34fb7d4c48f7c3e9b2, type: 2}
   m_IsPrefabParent: 0
@@ -483,6 +502,11 @@ MonoBehaviour:
   DoorMaterial: {fileID: 2100000, guid: 79febc8c027dfe449b7e4c20319655c4, type: 2}
   ButtonPlate: {fileID: 2100000, guid: 190ae71093c17bb4682fd48babadaa4c, type: 2}
   ButtonB: {fileID: 2100000, guid: 2067f760c18509c4693e2190b898fe2a, type: 2}
+  points:
+  - {x: 1, y: 0, z: 0}
+  - {x: 3, y: 0, z: 1}
+  - {x: 0, y: 1, z: 0}
+  - {x: 2, y: 1, z: 1}
 --- !u!4 &1104102326
 Transform:
   m_ObjectHideFlags: 0
