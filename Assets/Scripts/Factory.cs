@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unibas.DBIS.DynamicModelling;
 using Unibas.DBIS.DynamicModelling.Models;
+using Unibas.DBIS.DynamicModelling.Objects;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Factory : MonoBehaviour
 {
@@ -44,8 +46,27 @@ public class Factory : MonoBehaviour
 		ModelFactory.CreateWall(Width, Height, MaterialName).transform.position = new Vector3(-2,0,0);
 		ModelFactory.CreatePositionedWall(start, end, height, posMatName);
 		ModelFactory.CreateCuboidRoom(pos, Size, RH, names);
+
+		GameObject cuboid = ModelFactory.CreateCuboid(CW, CH, CD);
+		cuboid.transform.position = new Vector3(1,1,-1);
+		GameObject canvasObj = new GameObject("Canvas");
+		var c = canvasObj.AddComponent<Canvas>();
+		canvasObj.transform.parent = cuboid.transform;
+		canvasObj.transform.localPosition = Vector3.zero;
+		RectTransform rectTransform = (RectTransform) canvasObj.transform;
+		canvasObj.transform.localScale = new Vector3(1/rectTransform.rect.width, 1/rectTransform.rect.height, 1);
+		c.renderMode = RenderMode.WorldSpace;
+		RectTransform rect = (RectTransform)c.transform;
+		GameObject button = new GameObject("Button");
+		button.transform.parent = canvasObj.transform;
+		var b = button.AddComponent<Button>();
+		var e =  new Button.ButtonClickedEvent();
+		e.AddListener( () => Debug.Log("Clicked"));
+		b.onClick = e;
 		
-		ModelFactory.CreateCuboid(CW, CH, CD).transform.position = new Vector3(1,1,-1);
+		
+		
+		
 		
 		ComplexCuboidModel doorModel = new ComplexCuboidModel();
 		
@@ -61,5 +82,8 @@ public class Factory : MonoBehaviour
 		ModelFactory.CreateModel(buttonModel);
 
 		ModelFactory.CreateFreeformQuad(points[0], points[1], points[2], points[3]);
+		
+		
+		CuboidObject co = CuboidObject.Create(2,3,1);
 	}
 }

@@ -262,17 +262,21 @@ namespace Unibas.DBIS.DynamicModelling
             ceiling.name = "Ceiling";
             ceiling.transform.parent = ceilingAnchor.transform;
 
-            root.transform.position = model.Position;
+            
             // North Aligned
-            ceilingAnchor.transform.position = new Vector3(halfSize, model.Height, halfSize);
+            ceilingAnchor.transform.position = new Vector3(-halfSize, model.Height, halfSize);
             ceilingAnchor.transform.Rotate(Vector3.right, -90);
             // East Aligned
             //ceilingAnchor.transform.position = new Vector3(halfSize, height, -halfSize);
             //ceilingAnchor.transform.Rotate( Vector3.back, -90);
 
+            root.transform.position = model.Position;
+            
             root.AddComponent<ModelContainer>().Model = model;
             return root;
         }
+        
+        
 
 
         /// <summary>
@@ -286,64 +290,12 @@ namespace Unibas.DBIS.DynamicModelling
         /// <returns></returns>
         public static GameObject CreateWall(float width, float height, string materialName = null)
         {
-            GameObject go = new GameObject("Wall");
-            MeshFilter meshFilter = go.AddComponent<MeshFilter>();
-            MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
-            Mesh mesh = meshFilter.mesh;
-            Vector3[] vertices = new Vector3[4];
-            vertices[0] = new Vector3(0, 0, 0);
-            vertices[1] = new Vector3(width, 0, 0);
-            vertices[2] = new Vector3(0, height, 0);
-            vertices[3] = new Vector3(width, height, 0);
 
-            mesh.vertices = vertices;
+            return CreateWall(width, height, LoadMaterialByName(materialName));
+        }
 
-            int[] tri = new int[6];
-
-            tri[0] = 0;
-            tri[1] = 2;
-            tri[2] = 1;
-
-            tri[3] = 2;
-            tri[4] = 3;
-            tri[5] = 1;
-
-            mesh.triangles = tri;
-
-            Vector3[] normals = new Vector3[4];
-
-            normals[0] = -Vector3.forward;
-            normals[1] = -Vector3.forward;
-            normals[2] = -Vector3.forward;
-            normals[3] = -Vector3.forward;
-
-            mesh.normals = normals;
-
-            Vector2[] uv = new Vector2[4];
-
-            float xUnit = 1;
-            float yUnit = 1;
-
-            if (width > height)
-            {
-                xUnit = width / height;
-            }
-            else
-            {
-                yUnit = height / width;
-            }
-
-            uv[0] = new Vector2(0, 0);
-            uv[1] = new Vector2(xUnit, 0);
-            uv[2] = new Vector2(0, yUnit);
-            uv[3] = new Vector2(xUnit, yUnit);
-
-            mesh.uv = uv;
-
-            mesh.RecalculateBounds();
-            mesh.RecalculateNormals();
-            mesh.RecalculateTangents();
-
+        private static Material LoadMaterialByName(string materialName)
+        {
             if (!string.IsNullOrEmpty(materialName))
             {
                 if (!materialName.EndsWith("Material"))
@@ -351,14 +303,10 @@ namespace Unibas.DBIS.DynamicModelling
                     materialName = materialName + "Material";
                 }
 
-                Material mat = Resources.Load<Material>("Materials/" + materialName);
-                meshRenderer.material.CopyPropertiesFromMaterial(mat);
-                //meshRenderer.material.SetTextureScale("_MainTex", new Vector2(1,1));
-                meshRenderer.material.name = mat.name;
+                return Resources.Load<Material>("Materials/" + materialName);
             }
 
-
-            return go;
+            return null;
         }
 
         public static GameObject CreateWall(float width, float height, Material mat = null)
@@ -433,11 +381,21 @@ namespace Unibas.DBIS.DynamicModelling
                 meshRenderer.material.color = Color.white;
             }
 
+            // TODO Highly experimental!
+
+            var boxCollider = go.AddComponent<BoxCollider>();
+            boxCollider.size = new Vector3(width,height,0.0001f);
 
             return go;
         }
 
 
+        private static Vector3 CalculateUnit(Vector3 dimensions)
+        {
+            float m = Math.Max(Math.Max(dimensions.x, dimensions.y), dimensions.z);
+            return new Vector3(m/dimensions.x, m/dimensions.y, m/dimensions.z);
+        }
+        
         private static Vector2 CalculateUnit(float width, float height)
         {
             return CalculateNormalizedToLeastSquareUnit(width, height);
@@ -480,7 +438,6 @@ namespace Unibas.DBIS.DynamicModelling
                 meshRenderer.material.name = "Default";
                 meshRenderer.material.color = Color.white;
             }
-
             cub.AddComponent<ModelContainer>().Model = cuboid;
             return cub;
         }
@@ -554,13 +511,13 @@ namespace Unibas.DBIS.DynamicModelling
             };
             mesh.normals = normals;
 
-
+            
             /*
              * Unwrapping of mesh for uf like following
              *  U
              * LFRB
              *  D
-             */
+            */
 
             var u = Math.Min(Math.Min(width, height), depth);
             var w = width / u;
