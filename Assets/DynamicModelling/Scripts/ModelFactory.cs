@@ -1,3 +1,4 @@
+using System;
 using Unibas.DBIS.DynamicModelling.Models;
 using UnityEngine;
 
@@ -561,7 +562,12 @@ namespace Unibas.DBIS.DynamicModelling
              *  D
              */
 
-            Vector2 uvUnits = new Vector2(1f / (2 * depth + 2 * width), 1f / (height + 2 * depth));
+            var u = Math.Min(Math.Min(width, height), depth);
+            var w = width / u;
+            var h = height / u;
+            var d = depth / u;
+
+            Vector2 uvUnits = new Vector2(u,u);
             var fOff = uvUnits.x * depth;
             var rOff = uvUnits.x * width + fOff;
             var bOff = uvUnits.x * depth + rOff;
@@ -572,23 +578,28 @@ namespace Unibas.DBIS.DynamicModelling
                 new Vector2(fOff, uvUnits.y * depth), new Vector2(fOff + uvUnits.x * width, uvUnits.y * depth),
                 new Vector2(fOff, uvUnits.y * depth + uvUnits.y * height),
                 new Vector2(fOff + uvUnits.x * width, uvUnits.y * depth + uvUnits.y * height),
-                
+
                 // Back
                 new Vector2(bOff, uvUnits.y * depth), new Vector2(bOff + uvUnits.x * width, uvUnits.y * depth),
                 new Vector2(bOff, uvUnits.y * depth + uvUnits.y * height),
                 new Vector2(bOff + uvUnits.x * width, uvUnits.y * depth + uvUnits.y * height),
-                
+
                 // Left
-                new Vector2(0,uvUnits.y*depth),new Vector2(uvUnits.x*depth,uvUnits.y*depth),
-                new Vector2(0,uvUnits.y*depth+uvUnits.y*height),new Vector2(uvUnits.x*depth,uvUnits.y*depth+uvUnits.y*height),
+                new Vector2(0, uvUnits.y * depth), new Vector2(uvUnits.x * depth, uvUnits.y * depth),
+                new Vector2(0, uvUnits.y * depth + uvUnits.y * height),
+                new Vector2(uvUnits.x * depth, uvUnits.y * depth + uvUnits.y * height),
                 // Right
-                new Vector2(rOff,uvUnits.y*depth),new Vector2(rOff+uvUnits.x*depth,uvUnits.y*depth),
-                new Vector2(rOff,uvUnits.y*depth+uvUnits.y*height),new Vector2(rOff+uvUnits.x*depth,uvUnits.y*depth+uvUnits.y*height),
+                new Vector2(rOff, uvUnits.y * depth), new Vector2(rOff + uvUnits.x * depth, uvUnits.y * depth),
+                new Vector2(rOff, uvUnits.y * depth + uvUnits.y * height),
+                new Vector2(rOff + uvUnits.x * depth, uvUnits.y * depth + uvUnits.y * height),
                 // Up
-                new Vector2(fOff, uOff),new Vector2(fOff+uvUnits.x * width, uOff),new Vector2(fOff, uOff+uvUnits.y*depth),new Vector2(fOff+uvUnits.x * width, uOff+uvUnits.y*depth), 
-                 
+                new Vector2(fOff, uOff), new Vector2(fOff + uvUnits.x * width, uOff),
+                new Vector2(fOff, uOff + uvUnits.y * depth),
+                new Vector2(fOff + uvUnits.x * width, uOff + uvUnits.y * depth),
+
                 // Down
-                new Vector2(fOff, 0),new Vector2(fOff+uvUnits.x * width, 0),new Vector2(fOff, uvUnits.y*depth),new Vector2(fOff+uvUnits.x * width, uvUnits.y*depth)
+                new Vector2(fOff, 0), new Vector2(fOff + uvUnits.x * width, 0), new Vector2(fOff, uvUnits.y * depth),
+                new Vector2(fOff + uvUnits.x * width, uvUnits.y * depth)
             };
 
             mesh.uv = uv;
